@@ -1,12 +1,11 @@
 $(document).ready(function(){
-  Cookies.set('nombre','jhonatan');
 listarSolicitudes();
 
 });
 
 function listarSolicitudes(){
 
-    fetch('/api/listarTransporte', {
+    fetch('/api/transporte/listarTransportePorEmpleado', {
                 method: 'GET',
                 headers: {
                     "Content-type": "application/json",
@@ -16,10 +15,13 @@ function listarSolicitudes(){
               .then(response => response.json())
               .then(function(data){
                 if( data != null){
+                    console.log(data);
+                    var trama ="";
                      data.forEach(function(res){
                        var fecha_entrega = (res.fecha_entrega == null) ? 'Pendiente....' : res.fecha_entrega;
-                       $('#body-control-transporte').html('<tr><td>'+res.direccion_origen+'</td><td>'+res.dirrecion_destino+'</td><td>'+res.fecha_solicitud+'</td><td>'+fecha_entrega+'</td><td >'+res.cod_estado+'</td></tr>')
-                     })
+                       trama+='<tr><td>'+res.direccion_origen+'</td><td>'+res.dirrecion_destino+'</td><td>'+res.fecha_solicitud+'</td><td>'+fecha_entrega+'</td><td >'+res.cod_estado+'</td></tr>'                     })
+                     $('#body-control-transporte').html(trama);
+
                 }
               });
 

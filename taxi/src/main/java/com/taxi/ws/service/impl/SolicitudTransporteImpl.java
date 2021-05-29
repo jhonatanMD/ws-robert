@@ -39,6 +39,6 @@ public class SolicitudTransporteImpl implements SolicitudTransporteService {
 
     @Override
     public Flux<SolicitudTransporte> listarPorIdEmpleado(String idEmpleado) {
-        return null;
+        return repository.findByEmpleado(idEmpleado);
     }
 }
