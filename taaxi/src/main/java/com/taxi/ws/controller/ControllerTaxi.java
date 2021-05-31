@@ -1,6 +1,5 @@
 package com.taxi.ws.controller;
 
-import com.taxi.ws.models.Usuario;
 import com.taxi.ws.models.dto.DatosDeUsuario;
 import com.taxi.ws.models.dto.LoginDto;
 import com.taxi.ws.service.EmpleadoService;
@@ -16,11 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import reactor.core.publisher.Mono;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 @Configuration
 @Controller
