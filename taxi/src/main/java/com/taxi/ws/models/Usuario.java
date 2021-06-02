@@ -14,7 +14,8 @@ public class Usuario {
     @Id
     private String id;
     private String id_empleado;
+    private String id_rol;
     private String usuario;
     private String password;
-    private int estado;
+    private String estado;
 }

@@ -4,19 +4,20 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document("Empresa")
-public class Empresa {
+@Document("Rol")
+public class Rol {
 
     @Id
     private String id;
-    private String razon_social;
-    private String ruc;
-    private String direccion;
-    private String estado;
+    private String id_empresa;
+    private String rol;
+    private List<String> paginas;
 
 }

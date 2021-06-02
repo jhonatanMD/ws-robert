@@ -1,12 +1,30 @@
 var origen = 0;
 var destino = 0;
 
+var distancia = 0;
+var direccion_origen_txt ="";
+var direccion_destino_txt ="";
+
+function initialize() {
+  var txt_origen = document.getElementById('txt-origen');
+  var txt_destino = document.getElementById('txt-destino');
+  new google.maps.places.Autocomplete(txt_origen);
+  new google.maps.places.Autocomplete(txt_destino);
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
 $(document).ready(function(){
+
  $("#btn-buscar").click( function(){
 
     if($('#txt-origen').val().trim() != '' && $('#txt-destino').val().trim() != ''){
       pintarOrigen($('#txt-origen').val());
       pintarDestino($('#txt-destino').val());
+      map.removeMarkers();
+      map.removePolylines();
+      direccion_origen_txt = $('#txt-origen').val();
+      direccion_destino_txt = $('#txt-destino').val();
       $('#btn-solicitar').removeAttr("disabled");
     }else{
         alert("Ingrese campos de busqueda");
@@ -19,7 +37,12 @@ $("#btn-solicitar").click( function(){
 
     if(window.confirm("Seguro que desea solicitar el transporte")){
      pintarRuta(origen,destino);
+      $('#btn-solicitar').prop("disabled", true);
+      $('input[type="text"]').val('');
     }
+
+
+
 
 });
 
@@ -42,6 +65,8 @@ $("#btn-cancelar").click( function(){
     lng: -76.9655348,
   });
 
+const buscar = new google.maps.places.Autocomplete($('#txt-origen').val());
+buscar.bindTo("bounds",map);
 /*
   GMaps.geolocate({
     success: function(position) {
@@ -160,6 +185,7 @@ $("#btn-cancelar").click( function(){
 
 
 
+
 function pintarRuta(origenObtenido , destinoObtenido){
 
  map.drawRoute({
@@ -171,6 +197,44 @@ function pintarRuta(origenObtenido , destinoObtenido){
     strokeWeight: 6
   });
 
+    map.getRoutes({
+        origin: origenObtenido,
+        destination: destinoObtenido,
+        callback: function (e) {
+            var time = 0;
+            var distance = 0;
+            for (var i=0; i<e[0].legs.length; i++) {
+                time += e[0].legs[i].duration.value;
+                distance += e[0].legs[i].distance.value;
+            }
+
+            var peticion = {
+                    "direccion_origen":direccion_origen_txt,
+                    "dirrecion_destino":direccion_destino_txt,
+                    "coordenadas_origen":origen,
+                    "coordenadas_destino":destino,
+                    "kilometraje":distance,
+                    "cod_estado": "0"
+                  }
+
+            console.log(peticion);
+            fetch('/api/transporte/guardarTransporte', {
+                            method: 'POST',
+                            body: JSON.stringify(peticion),
+                            headers: {
+                                "Content-type": "application/json",
+                                'Access-Control-Allow-Origin': '*',
+                            }
+                            })
+                          .then(response => response.json())
+                          .then(function(data){
+
+                              console.log(data);
+
+                          });
+
+        }
+    });
 }
 
 

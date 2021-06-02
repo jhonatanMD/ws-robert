@@ -9,7 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.taxi</groupId>
-	<artifactId>taaxi</artifactId>
+	<artifactId>taxi</artifactId>
+
 	<version>0.0.1-SNAPSHOT</version>
 	<name>taxi</name>
 	<description>Demo project for Spring Boot</description>
@@ -94,14 +95,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

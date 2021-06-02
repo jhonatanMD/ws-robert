@@ -21,10 +21,8 @@ public class SolicitudTransporte {
     private String id;
     private String id_empresa;
     private String id_empleado;
-    private String latitud_origen;
-    private String logitud_origen;
-    private String latitud_destino;
-    private String logitud_destino;
+    private double[] coordenadas_origen;
+    private double[] coordenadas_destino;
     private String direccion_origen;
     private String dirrecion_destino;
     private String kilometraje;
@@ -33,6 +31,6 @@ public class SolicitudTransporte {
     private LocalDate fecha_solicitud;
     @JsonFormat(pattern = "dd-MM-yyyy", shape = Shape.STRING)
     private LocalDate fecha_entrega;
-    private int cod_estado;
+    private String cod_estado;
 
 }

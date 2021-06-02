@@ -14,6 +14,6 @@ public class Cargo {
     private String id;
     private String cargo;
     private String id_empresa;
-    private int estado;
+    private String estado;
 
 }
