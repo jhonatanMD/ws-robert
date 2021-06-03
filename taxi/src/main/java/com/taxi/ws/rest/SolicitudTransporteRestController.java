@@ -31,7 +31,6 @@ public class SolicitudTransporteRestController {
     public Flux<SolicitudTransporte> listarTransporte(HttpServletRequest req ,@PathVariable("pag") int pag){
 
         DatosDeUsuario datosDeUsuario = (DatosDeUsuario) req.getSession().getAttribute("usuario");
-        System.out.println(datosDeUsuario.getUsuario().getId_empleado()+" "+pag);
         return service.listarPorIdEmpleadoPaginacion(pag,datosDeUsuario.getUsuario().getId_empleado());
     }
 

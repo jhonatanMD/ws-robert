@@ -10,4 +10,7 @@ $(document).ready(function(){
       $("#control-transporte").click( function(){
         $("#contenedor-principal").load('control-transporte');
       });
+
+
+
 });

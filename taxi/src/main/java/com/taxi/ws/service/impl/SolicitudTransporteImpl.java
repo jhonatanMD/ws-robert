@@ -56,8 +56,6 @@ public class SolicitudTransporteImpl implements SolicitudTransporteService {
     @Override
     public Flux<SolicitudTransporte> listarPorIdEmpleadoPaginacion(int pg1 ,String idEmpleado) {
 
-
-
         Query query = new Query();
         query.skip(pg1 * 10);
         query.limit(10);

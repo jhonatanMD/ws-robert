@@ -45,9 +45,9 @@ public class ControllerTaxi {
     private RolService rolService;
 
     @GetMapping("/inicio")
-    public String inicio() {
+    public Mono<String> inicio(HttpServletResponse resp) {
 
-        return "inicio";
+        return Mono.just("inicio");
     }
 
     @PostMapping("/login")
@@ -111,6 +111,18 @@ public class ControllerTaxi {
             }
             return  pagina;
         });
+    }
+
+    @GetMapping("/usuario")
+    public Mono<String> usuario(HttpServletRequest req, HttpServletResponse resp) {
+        return  validation(req,"usuario");
+
+    }
+    @GetMapping("/cerrar")
+    public Mono<String> cerrar(HttpServletRequest req, HttpServletResponse resp) {
+        req.getSession().invalidate();
+        return  validation(req,"inicio");
+
     }
 
     private  Mono<String> validation(HttpServletRequest req , String page) {
