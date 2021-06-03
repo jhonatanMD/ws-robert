@@ -17,7 +17,9 @@ import reactor.core.publisher.Mono;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @Controller
@@ -31,6 +33,9 @@ public class ControllerTaxi {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private CargoService cargoService;
 
     @Autowired
     private EmpleadoService empleadoService;
@@ -113,10 +118,22 @@ public class ControllerTaxi {
         });
     }
 
-    @GetMapping("/usuario")
-    public Mono<String> usuario(HttpServletRequest req, HttpServletResponse resp) {
-        return  validation(req,"usuario");
+    @GetMapping("/empleado")
+    public Mono<String> usuario(Model model,HttpServletRequest req, HttpServletResponse resp) {
+        return  validation(req,"empleado").flatMap(pagina -> {
+            if(req.getSession().getAttribute("usuario") != null) {
+                usuarioSesion = (DatosDeUsuario) req.getSession().getAttribute("usuario");
+                model.addAttribute("navegaciones", usuarioSesion.getPaginas());
+            }
+            return this.edades().flatMap(edades -> {
+                model.addAttribute("edades",edades);
+                return  cargoService.listarCargoPorEmpresa(usuarioSesion.getEmpresa().getId()).collectList().map(cargo ->{
+                    model.addAttribute("cargos",cargo);
+                    return pagina;
+                });
+            });
 
+        });
     }
     @GetMapping("/cerrar")
     public Mono<String> cerrar(HttpServletRequest req, HttpServletResponse resp) {
@@ -138,5 +155,14 @@ public class ControllerTaxi {
 
         });
 
+    }
+
+
+    private Mono<List<Integer>> edades(){
+        List<Integer> edades = new ArrayList<>();
+        for(int edad = 1 ; edad < 100 ; edad ++)
+            edades.add(edad);
+
+        return Mono.just(edades);
     }
 }
