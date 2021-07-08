@@ -10,4 +10,5 @@ public interface EmpleadoService {
     Flux<Empleado> listarEmpleados();
     Flux<Empleado> listarEmpleadoPorEmpresa(String id_empresa);
     Mono<Empleado> listarEmpleadoPorId(String id_empleado);
+    Mono<Empleado> listarEmpleado(String dni,String id_empresa);
 }

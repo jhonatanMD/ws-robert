@@ -9,6 +9,7 @@ public interface CargoService {
 
     Flux<Cargo> listarCargo();
     Flux<Cargo> listarCargoPorEmpresa(String id_empresa);
+    Mono<Cargo> listarCargoPorId(String id);
     Mono<Cargo> guardarCargo(Cargo cargo);
     Mono<Cargo> actualizarCargo(String id_cargo , Cargo cargo);
 }

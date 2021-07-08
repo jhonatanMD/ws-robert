@@ -1,3 +1,6 @@
+var indice = 0;
+var tabla;
+
 $(document).ready(function(){
 
 fetch('/api/empleado/listaPorEmpresa', {
@@ -8,10 +11,11 @@ fetch('/api/empleado/listaPorEmpresa', {
                 }
                 })
               .then(response => response.json())
-              .then(function(data){
-              console.log(data);
-                if( data != null){
-                    $('#table-empleado').DataTable({
+              .then(function(res){
+                if( res != null){
+
+
+                  tabla =  $('#table-empleado').DataTable({
                     language: {
                             "decimal": "",
                             "emptyTable": "No hay información",
@@ -35,19 +39,28 @@ fetch('/api/empleado/listaPorEmpresa', {
                       paging: true,
                       searching: true,
                       info: true,
-                      data: data,
+                      data: res,
                       columns: [
-                        { title: "Direccion Origen", data: "direccion_origen" },
-                        { title: "Direccion Destino", data: "dirrecion_destino" },
-                        { title: "Fecha Solicitud", data: "fecha_solicitud" },
-                        { title: "Fecha Entrega", data: "fecha_entrega" },
-                        { title: "Estado", data: "cod_estado" },
+                        { title: "Nombre", data: "empleado.nombre" },
+                        { title: "Apellido Paterno", data: "empleado.ape_pat" },
+                        { title: "Apellido Materno", data: "empleado.ape_mat" },
+                        { title: "Dni", data: "empleado.dni" },
+                        { title: "Edad", data: "empleado.edad" },
+                        { title: "Correo", data: "empleado.email" },
+                        { title: "Cargo", data: "cargo.cargo" },
+                        {"defaultContent": "<div class='text-center'><div class='btn-group'><button class='btn btn-info btn-sm btnEditar'>Editar</button><button class='btn btn-danger btn-sm btnBorrar'>Borrar</button></div></div>"}
                       ]
                     });
 
                 }else{
-                 $('#table-transporte').DataTable({});
+                 $('#table-empleado').DataTable({});
                 }
               });
 
+
+
+
+
+
 });
+

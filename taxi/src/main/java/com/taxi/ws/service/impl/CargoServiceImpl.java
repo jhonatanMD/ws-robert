@@ -26,6 +26,11 @@ public class CargoServiceImpl implements CargoService {
     }
 
     @Override
+    public Mono<Cargo> listarCargoPorId(String id) {
+        return repository.findById(id);
+    }
+
+    @Override
     public Mono<Cargo> guardarCargo(Cargo cargo) {
         return repository.save(cargo);
     }

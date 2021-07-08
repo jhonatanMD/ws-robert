@@ -118,6 +118,18 @@ public class ControllerTaxi {
         });
     }
 
+    @GetMapping("/control-transporte-admin")
+    public Mono<String> control_transporte_admin(Model model, HttpServletRequest req) {
+
+        return validation(req,"control-transporte-admin").map(pagina -> {
+            if(req.getSession().getAttribute("usuario") != null) {
+                usuarioSesion = (DatosDeUsuario) req.getSession().getAttribute("usuario");
+                model.addAttribute("navegaciones", usuarioSesion.getPaginas());
+            }
+            return  pagina;
+        });
+    }
+
     @GetMapping("/empleado")
     public Mono<String> usuario(Model model,HttpServletRequest req, HttpServletResponse resp) {
         return  validation(req,"empleado").flatMap(pagina -> {

@@ -1,7 +1,9 @@
 package com.taxi.ws.rest;
 
 import com.taxi.ws.models.Empleado;
+import com.taxi.ws.models.dto.DatosDeEmpleado;
 import com.taxi.ws.models.dto.DatosDeUsuario;
+import com.taxi.ws.service.CargoService;
 import com.taxi.ws.service.EmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,9 @@ public class EmpleadoRestController {
     @Autowired
     private EmpleadoService service;
 
+    @Autowired
+    private CargoService cargoService;
+
     @GetMapping("/listar")
     public Flux<Empleado> listarEmpleado(){
         return service.listarEmpleados();
@@ -29,15 +34,29 @@ public class EmpleadoRestController {
     }
 
     @GetMapping("/listaPorEmpresa")
-    public Flux<Empleado> listarEmpleadoPorEmpresa(HttpServletRequest req){
+    public Flux<DatosDeEmpleado> listarEmpleadoPorEmpresa(HttpServletRequest req){
         DatosDeUsuario datosDeUsuario = (DatosDeUsuario) req.getSession().getAttribute("usuario");
-        return service.listarEmpleadoPorEmpresa(datosDeUsuario.getEmpresa().getId());
+        return service.listarEmpleadoPorEmpresa(datosDeUsuario.getEmpresa().getId()).flatMap(empleado -> {
+            DatosDeEmpleado datosDeEmpleado = new DatosDeEmpleado();
+            datosDeEmpleado.setEmpleado(empleado);
+            return cargoService.listarCargoPorId(empleado.getId_cargo()).flatMapMany(cargo -> {
+                datosDeEmpleado.setCargo(cargo);
+                return Flux.just(datosDeEmpleado);
+            });
+        });
     }
 
     @PostMapping("/guardar")
-    public Mono<Empleado> guardar(@RequestBody Empleado empleado){
+    public Mono<Empleado> guardar(@RequestBody Empleado empleado ,HttpServletRequest req){
 
-        return service.guardarEmpleado(empleado);
+        DatosDeUsuario datosDeUsuario = (DatosDeUsuario) req.getSession().getAttribute("usuario");
+        empleado.setId_empresa(datosDeUsuario.getEmpresa().getId());
+        return service.listarEmpleado(empleado.getDni(),empleado.getId_empresa())
+                .flatMap(res -> {
+                    empleado.setId(res.getId());
+                    return service.guardarEmpleado(empleado);
+        }).switchIfEmpty(service.guardarEmpleado(empleado));
+
     }
 
 

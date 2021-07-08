@@ -33,4 +33,9 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     public Mono<Empleado> listarEmpleadoPorId(String id_empleado) {
         return repository.findById(id_empleado);
     }
+
+    @Override
+    public Mono<Empleado> listarEmpleado(String dni, String id_empresa) {
+        return repository.findEmpleadoByDniAndEmpresa(dni,id_empresa);
+    }
 }

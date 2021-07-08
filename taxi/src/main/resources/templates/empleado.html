@@ -14,13 +14,21 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
     <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
-
+    <script src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+    <script src="/js/empleado.js"></script>
 </head>
 <style>
 
     #form-usuario{
     margin : 30px 30px 30px 30px;
     }
+
+    .contenedor{
+    margin : 30px 30px 30px 30px;
+    }
+
+
 </style>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -77,11 +85,82 @@
             <input type="email" class="form-control" id="correo" placeholder="Correo Electronico" required>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Registrar</button>
+    <button id="btn-submit" type="submit" class="btn btn-primary">Registrar</button>
 </form>
 <div class="contenedor">
-    <table id="table-transporte" class="table table-striped table-bordered" style="width:100%">
+    <table id="table-empleado" class="table table-striped table-bordered" style="width:100%">
     </table>
 </div>
+<div id="alerta-registro" class="alert alert-success">
+    <strong>Registrado ..!</strong>
+</div>
+
+<script>
+
+
+    $(document).ready(function(){
+
+         $("#alerta-registro").hide();
+
+        $(document).on("click", ".btnEditar", function(){
+                $('#btn-submit').text("Actualizar");
+                var fila = $(this).closest("tr");
+                var dni = fila.find('td:eq(3)').text();
+                $('#nombre').val(fila.find('td:eq(0)').text());
+                $('#apellido_paterno').val(fila.find('td:eq(1)').text());
+                $('#apellido_materno').val(fila.find('td:eq(2)').text());
+                $('#dni').val(fila.find('td:eq(3)').text());
+                $("#edad option[value='"+fila.find('td:eq(4)').text()+"']").attr("selected", true);
+                $('#correo').val(fila.find('td:eq(5)').text());
+                $("#cargo option[value='"+fila.find('td:eq(6)').text()+"']").attr("selected", true);
+            });
+
+
+
+             var peticion = {
+              "ape_mat": $("#apellido_materno").val(),
+              "ape_pat": $("#apellido_paterno").val(),
+              "dni": $("#dni").val(),
+              "edad": $("#edad").val(),
+              "email": $("#correo").val(),
+              "estado": 0,
+              "id_cargo": $("#cargo").val(),
+              "nombre": $("#nombre").val()
+            };
+
+             $('#btn-submit').click(function(){
+             console.log("entro")
+              fetch('/api/empleado/guardar', {
+                 method: 'POST',
+                 body: JSON.stringify(peticion),
+                 headers: {
+                   "Content-type": "application/json",
+                   'Access-Control-Allow-Origin': '*',
+                  }
+                 })
+                .then(response => response.json())
+                .then(function(data){
+               console.log(data);
+
+            });
+
+
+            $('#btn-submit').text("Registrar");
+             });
+
+
+
+
+            function alertaRegistroShow() {
+                $("#alerta-registro").show();
+            }
+
+             function alertaRegistroHide() {
+                $("#alerta-registro").hide();
+            }
+    });
+
+
+</script>
 </body>
 </html>
