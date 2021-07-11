@@ -58,6 +58,7 @@ public class SolicitudTransporteRestController {
         DatosDeUsuario datosDeUsuario = (DatosDeUsuario) req.getSession().getAttribute("usuario");
         transporte.setId_empleado(datosDeUsuario.getEmpleado().getId());
         transporte.setId_empresa(datosDeUsuario.getEmpresa().getId());
+        transporte.setCod_estado("0");
         double precio = Long.parseLong(transporte.getKilometraje()) * Constantes.PRECIO_POR_METRO;
         transporte.setPrecio(new BigDecimal(Math.ceil(precio)));
         return service.guardarSolicitud(transporte).flatMap(d ->
@@ -69,7 +70,7 @@ public class SolicitudTransporteRestController {
         DatosDeUsuario datosDeUsuario = (DatosDeUsuario) req.getSession().getAttribute("usuario");
          return service.listarPorIdEmpleado(datosDeUsuario.getUsuario().getId_empleado()).map(r -> {
 
-            r.setCod_estado(Constantes.ESTADO_TRANSPORTE.get(r.getCod_estado()));
+            //r.setCod_estado(Constantes.ESTADO_TRANSPORTE.get(r.getCod_estado()));
 
             return r;
         });
